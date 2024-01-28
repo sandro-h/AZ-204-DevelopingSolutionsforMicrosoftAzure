@@ -8,15 +8,17 @@
     using System.Text.Json;
     using System.IO;
     using Microsoft.Azure.Cosmos;
+    using System.Net;
+
 
     public class Program
     {
-        private const string EndpointUrl = "";
-        private const string AuthorizationKey = "";
+        private const string EndpointUrl = "https://polycosmossandro.documents.azure.com:443/";
+        private const string AuthorizationKey = "c1uhjtG2kwbbrgwUUCNw61Yz3hxa2fiNzKw96HiQeTnG9pOT8Lh6YfPMbtaOui518eiPJSVJlLYXACDb2jI2Gw==";
         private const string DatabaseName = "Retail";
         private const string ContainerName = "Online";
-        private const string PartitionKey = "";
-        private const string JsonFilePath = "";
+        private const string PartitionKey = "/Category";
+        private const string JsonFilePath = @"C:\Users\she\Desktop\azure_cert\AZ-204-DevelopingSolutionsforMicrosoftAzure\Allfiles\Labs\04\Starter\AdventureWorks\AdventureWorks.Upload\models.json";
 
         static private int amountToInsert;
         static List<Model> models;
@@ -26,7 +28,11 @@
             try
             {
                 // <CreateClient>
-                CosmosClient cosmosClient = new CosmosClient(EndpointUrl, AuthorizationKey, new CosmosClientOptions() { AllowBulkExecution = true });
+                CosmosClient cosmosClient = new CosmosClient(EndpointUrl, AuthorizationKey, new CosmosClientOptions() { 
+                    AllowBulkExecution = true ,
+                    WebProxy = new WebProxy("http://proxy.adnovum.ch:3128/", true),
+                    ConnectionMode = ConnectionMode.Gateway
+                });
                 // </CreateClient>
 
                 // <Initialize>
